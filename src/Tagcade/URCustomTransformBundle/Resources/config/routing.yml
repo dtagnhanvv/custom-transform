@@ -1,3 +1,0 @@
-ur_custom_transform_homepage:
-    path:     /
-    defaults: { _controller: URCustomTransformBundle:Default:index }

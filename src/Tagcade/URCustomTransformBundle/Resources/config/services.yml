@@ -2,3 +2,24 @@ services:
 #    ur_custom_transform.example:
 #        class: Tagcade\URCustomTransformBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
+    nhanvv.doctrine.update.listener:
+        class: Tagcade\URCustomTransformBundle\EventListener\GetDoctrineListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: preSoftDelete }
+            - { name: doctrine.event_listener, event: postFlush}
+
+    nhanvv.security.authentication.listener:
+        class: Tagcade\URCustomTransformBundle\EventListener\GetJWTListener
+        arguments: ["@security.token_storage", "@security.authentication.manager", "", "@lexik_jwt_authentication.handler.authentication_success", "@lexik_jwt_authentication.handler.authentication_failure", "", "@logger"]
+        tags:
+            - { name: monolog.logger, channel: security}
+
+    nhanvv.event.jwt_created_listener:
+        class: Tagcade\URCustomTransformBundle\EventListener\JWTCreatedListener
+        tags:
+            -
+                name: kernel.event_listener
+                event: 'lexik_jwt_authentication.on_jwt_created'
+                method: 'onJWTCreated'

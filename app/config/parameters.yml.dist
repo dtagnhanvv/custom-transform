@@ -1,19 +1,179 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
+    database_driver:   pdo_mysql
     database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     symfony
-    database_user:     root
-    database_password: ~
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
+    database_port:     null
+    database_name:     tagcade_api
+    database_user:     tagcadedev
+    database_password: tagcadedev
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
 
-    # A secret key that's used to generate certain security-related tokens
+    secret: e020b68d7e5664549856b98d45a0bd79df7117b0
+    kernel.secret: e020b68d7e5664549856b98d45a0bd79df7117b0
+
+    mailer_port: 1025
+    mailer_sender: tagcade.dev@gmail.com
+    mailer_sender_name: Tagcade.dev
+    password_resetting_link: http://localhost:9010/#/reset/changePassword
+
+    locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    pheanstalk_primary_host: 127.0.0.1
+
+    rtb.exchanges:
+        -
+            name: Index Exchange
+            abbreviation: index-exchange # This abbreviation will be used in the auction service configuration in order to enable this exchange
+
+    hb.bidders:
+        -
+            name: "openx"
+            abbreviation: bidders # This abbreviation will be used in the auction service configuration in order to enable this exchange
+
+    tc.default_page_size: 10
+    tc.default_tag_url:
+        domain: 'tags.tagcade.dev'
+        secure: true
+
+    tc.video_vast_tag_base_url: http://vast-tag-server.tagcade.dev:9999/vast/UUID # keep pattern "UUID" for replacing by real uuid of video waterfall tag
+    tc.in_banner_video_js_url: http://in-banner.pubvantage.dev:8081/inbannervideo.js
+
+    tc.redis.app_cache.host: '127.0.0.1'
+    tc.redis.app_cache.port: 6379
+
+    tc.redis.display_tag_cache.host: '127.0.0.1'
+    tc.redis.display_tag_cache.port: 6379
+
+    tc.redis.video_tag_cache.host: '127.0.0.1'
+    tc.redis.video_tag_cache.port: 6379
+
+    tc.redis.vast_tag_request_namespace: 'tc:vast_request:%s'
+
+    tc.report.performance.event_counter.redis_pipeline_size_threshold: 10000
+
+    tc.statistics.number_previous_days_to_include: 7 # number of days included in statistics, counted from current day back.
+    tc.max_cache_version: 20 # maximum cache version of a specific key is kept in Redis cache
+    tc.display.billing.thresholds:
+        - {threshold: 0, cpmRate: 0.030}
+        - {threshold: 100000000, cpmRate: 0.025}
+        - {threshold: 1000000000, cpmRate: 0.020}
+        - {threshold: 2000000000, cpmRate: 0.015}
+        - {threshold: 5000000000, cpmRate: 0.010}
+
+    tc.source.billing.thresholds:
+        - {threshold: 0, cpmRate: 0.030}
+        - {threshold: 100000000, cpmRate: 0.025}
+        - {threshold: 1000000000, cpmRate: 0.020}
+        - {threshold: 2000000000, cpmRate: 0.015}
+        - {threshold: 5000000000, cpmRate: 0.010}
+
+    tc.video.billing.thresholds:
+        - {threshold: 0, cpmRate: 0.15}
+        - {threshold: 200000000, cpmRate: 0.14}
+        - {threshold: 400000000, cpmRate: 0.13}
+        - {threshold: 600000000, cpmRate: 0.12}
+        - {threshold: 800000000, cpmRate: 0.11}
+        - {threshold: 1000000000, cpmRate: 0.10}
+
+    tc.inbanner.billing.thresholds:
+        - {threshold: 0, cpmRate: 0.05}
+
+    tc.header_bid.billing.thresholds:
+        - {threshold: 0, cpmRate: 0.030}
+        - {threshold: 100000000, cpmRate: 0.025}
+        - {threshold: 1000000000, cpmRate: 0.020}
+        - {threshold: 2000000000, cpmRate: 0.015}
+        - {threshold: 5000000000, cpmRate: 0.010}
+
+    tc.cdn_config:
+        host: '192.168.55.100'
+        secured: false
+        username: 'user'
+        password: 'guest'
+        port: 2121
+        timeout: 90
+        ad_slot_path: adslot/
+        ron_ad_slot_path: ronadslot/
+        push_ftp_enabled: true
+        
+    tc.builtin.black_list:
+        -
+            name: 'Aol Default Blacklist'
+            suffixKey: 'aol_default'
+            # the redis key should be 'video:domain_blacklist:aol_default'
+            builtin: true
+        -
+            name: 'SpotX Standard Blacklist'
+            suffixKey: 'spotx_standard'
+            # the redis key should be 'video:domain_blacklist:sportx_standard'
+            builtin: true
+
+    insert_batch_size: 100
+
+    jwt_private_key_path: %kernel.root_dir%/var/jwt/private.pem   # ssh private key path
+    jwt_public_key_path:  %kernel.root_dir%/var/jwt/public.pem    # ssh public key path
+    jwt_key_pass_phrase:  'tagcade'                               # ssh key pass phrase
+    jwt_token_ttl:        86400
+
+    unified_report_mail_domain: unifiedreports.tagcade.com
+
+    partner_tag_id.matching_config:
+        sovrn:
+            pattern: '/z\=([0-9]+)/'
+        33across:
+            pattern: /\(\'([0-9]+x[0-9]+)\'/
+        defy-media:
+            pattern: '/id\=([0-9]+)/'
+        yellow-hammer:
+            pattern: '/BEGIN JS TAG - (.*) </'
+        pulse-point:
+            pattern: '/cwtagid\=([0-9]+)/'
+        epom-market:
+            pattern: '/^.*?epmads_width = "([\d]+)".*?epmads_height = "([\d]+)".*?$/s'
+            finalize-pattern: '$1x$2 (JS Sync)'
+        native-ads:
+            pattern: '/(\d+)_\d+ - DO NOT MODIFY/'
+        google-adx:
+            pattern: '#google_ad_client\s*=\s*.*\n\s*/\*\s*([^*]+)\s*\*/#'
+        cpm-base:
+            use-size: true
+        rubicon:
+            pattern: '#Zone:\s*([^ ]+)#'
+
+    tc.bulk_upload.site.index:
+        name: 0
+        domain: 1
+        rtbStatus: 2
+        sourceReport: 3
+    tc.bulk_upload.display_ad_slot.index:
+        site: 0
+        name: 1
+        width: 2
+        height: 3
+        autoFit: 4
+        headerBidPrice: 5
+    tc.bulk_upload.dynamic_ad_slot:
+        index:
+            siteName: 0
+            dynamicAdSlotName: 1
+            defaultAdSlot: 2
+        expression_index:
+            dynamicAdSlotName: 0
+            expressionAdSlot: 1
+            startPosition: 2
+            hbBidPrice: 3
+            expression: 4
+            condition: 5
+            conditionType: 6
+            comparison: 7
+            conditionValue: 8
+    tc.bulk_upload.ad_tag.index:
+        adSlotName: 0
+        adNetwork: 1
+        html: 2
+        position: 3
+        rotation: 4
