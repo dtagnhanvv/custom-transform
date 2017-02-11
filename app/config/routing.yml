@@ -1,0 +1,7 @@
+ur_custom_transform:
+    resource: "@URCustomTransformBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
